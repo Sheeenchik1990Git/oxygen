@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>OxyGen — Глоток свежего воздуха</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Жидкий анимированный фон -->
+  <div class="liquid-bg">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <!-- Всплывающие уведомления -->
+  <div id="toast" class="toast hidden"></div>
+
+  <!-- ЭКРАН 1: Стартовый выбор (только Регистрация или Вход) -->
+  <main id="start-screen" class="screen active">
+    <div class="hero-content">
+      <div class="glass-pill">O₂ • FRESH AIR</div>
+      <h1 class="brand-title">OxyGen</h1>
+      <p class="brand-subtitle">Глоток свежего воздуха в рутине</p>
+    </div>
+
+    <div class="action-buttons">
+      <button class="glass-btn primary" onclick="openSheet('register')">
+        <span>Регистрация</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+      <button class="glass-btn secondary" onclick="openSheet('login')">
+        <span>Вход</span>
+      </button>
+    </div>
+  </main>
+
+  <!-- ЭКРАН 2: Главная страница OxyGen после авторизации -->
+  <main id="oxygen-home" class="screen hidden">
+    <header class="top-glass-bar">
+      <div class="welcome-badge">O₂</div>
+      <h1 class="welcome-heading">Добро пожаловать в <span>OxyGen</span></h1>
+      <p class="welcome-tagline">Глоток свежего воздуха в рутине</p>
+    </header>
+
+    <section class="glass-workspace">
+      <div class="user-chip">
+        <span class="status-dot"></span>
+        <span id="user-email-label">user@oxygen.app</span>
+      </div>
+      <p class="empty-hint">Пространство готово. Здесь чисто и спокойно.</p>
+      <button id="logout-btn" class="glass-btn danger-glass">Выйти из аккаунта</button>
+    </section>
+  </main>
+
+  <!-- ПЛАВНОЕ НИЖНЕЕ МЕНЮ (Bottom Sheet) -->
+  <div id="sheet-backdrop" class="backdrop hidden" onclick="closeSheet()"></div>
+  <div id="bottom-sheet" class="bottom-sheet">
+    <div class="sheet-handle" onclick="closeSheet()"></div>
+
+    <!-- ШАГ: ВХОД (Почта + Пароль) -->
+    <form id="form-login" class="sheet-step hidden">
+      <h2>С возвращением</h2>
+      <p class="step-desc">Введите почту и пароль для входа в OxyGen</p>
+
+      <div class="input-box">
+        <label>Электронная почта</label>
+        <input type="email" id="login-email" placeholder="name@example.com" required autocomplete="email">
+      </div>
+
+      <div class="input-box">
+        <label>Пароль</label>
+        <input type="password" id="login-password" placeholder="••••••••" required autocomplete="current-password">
+      </div>
+
+      <button type="submit" class="glass-btn primary full">Войти в OxyGen</button>
+    </form>
+
+    <!-- ШАГ 1 РЕГИСТРАЦИИ: Ввод почты -->
+    <form id="form-reg-email" class="sheet-step hidden">
+      <h2>Создать аккаунт</h2>
+      <p class="step-desc">Укажите почту — мы отправим 6-значный код</p>
+
+      <div class="input-box">
+        <label>Электронная почта</label>
+        <input type="email" id="reg-email" placeholder="name@example.com" required autocomplete="email">
+      </div>
+
+      <button type="submit" class="glass-btn primary full">Получить код</button>
+    </form>
+
+    <!-- ШАГ 2 РЕГИСТРАЦИИ: Подтверждение 6-значного кода -->
+    <form id="form-reg-code" class="sheet-step hidden">
+      <h2>Код из письма</h2>
+      <p class="step-desc">Отправили 6 цифр на <strong id="display-reg-email"></strong></p>
+
+      <div class="otp-grid" id="otp-inputs">
+        <input type="text" inputmode="numeric" maxlength="1" class="otp-cell" required>
+        <input type="text" inputmode="numeric" maxlength="1" class="otp-cell" required>
+        <input type="text" inputmode="numeric" maxlength="1" class="otp-cell" required>
+        <input type="text" inputmode="numeric" maxlength="1" class="otp-cell" required>
+        <input type="text" inputmode="numeric" maxlength="1" class="otp-cell" required>
+        <input type="text" inputmode="numeric" maxlength="1" class="otp-cell" required>
+      </div>
+
+      <button type="submit" class="glass-btn primary full">Подтвердить код</button>
+
+      <button type="button" id="resend-code-btn" class="text-btn" disabled>
+        Отправить повторно через <span id="resend-timer">60</span>с
+      </button>
+    </form>
+
+    <!-- ШАГ 3 РЕГИСТРАЦИИ: Придумать пароль -->
+    <form id="form-reg-password" class="sheet-step hidden">
+      <h2>Придумайте пароль</h2>
+      <p class="step-desc">Почта подтверждена! Задайте пароль (минимум 8 символов)</p>
+
+      <div class="input-box">
+        <label>Новый пароль</label>
+        <input type="password" id="reg-password" placeholder="Минимум 8 символов" minlength="8" required autocomplete="new-password">
+      </div>
+
+      <div class="strength-bar"><div id="strength-fill"></div></div>
+
+      <button type="submit" class="glass-btn primary full">Завершить и войти</button>
+    </form>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
